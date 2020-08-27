@@ -6,6 +6,7 @@ import com.el.base.utils.collection.CollectionUtils;
 import com.el.base.utils.scan.PackageScan;
 import com.el.constant.annotation.Switch;
 import com.el.constant.annotation.SwitchConstant;
+import com.el.constant.controller.SwitchUpdateEndpoint;
 import com.el.constant.utils.ConstantValueUpdate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +36,7 @@ public class EnableSwitchClientImportSelector implements ImportSelector {
         String basePackageName = className.substring(0, className.lastIndexOf("."));
         // 初始化 switch类
         initSwitchClass(basePackageName);
-        return new String[]{};
+        return new String[]{SwitchUpdateEndpoint.class.getName()};
     }
 
     /**

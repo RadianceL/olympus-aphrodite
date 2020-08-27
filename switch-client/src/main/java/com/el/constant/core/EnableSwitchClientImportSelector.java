@@ -1,7 +1,5 @@
 package com.el.constant.core;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.el.base.utils.collection.CollectionUtils;
 import com.el.base.utils.scan.PackageScan;
 import com.el.constant.annotation.Switch;
@@ -9,14 +7,12 @@ import com.el.constant.annotation.SwitchConstant;
 import com.el.constant.controller.SwitchUpdateEndpoint;
 import com.el.constant.utils.ConstantValueUpdate;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.type.AnnotationMetadata;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -73,26 +69,20 @@ public class EnableSwitchClientImportSelector implements ImportSelector {
         // 注册成员到服务端
         SwitchServerConnector.registerSwitchField(annotation.serverAddr(), annotation.appName(), targetClass.getName(), switchConstantList);
         // 获取服务端当前app下全量配置信息
-        String allSwitchDataByAppName = SwitchServerConnector.findAllSwitchDataByAppName(annotation.serverAddr(), annotation.appName());
+        Map<String, Object> allSwitchDataByAppNameMap = SwitchServerConnector.findAllSwitchDataByAppName(annotation.serverAddr(), annotation.appName());
         // 使用服务端信息初始化项目中的成员
-        initSwitchField(switchConstantList, allSwitchDataByAppName);
+        initSwitchField(switchConstantList, allSwitchDataByAppNameMap);
     }
 
-    private static void initSwitchField(List<Field> switchConstantList, String allSwitchDataByAppName) {
-        if (CollectionUtils.isEmpty(switchConstantList) || StringUtils.isBlank(allSwitchDataByAppName)) {
+    private static void initSwitchField(List<Field> switchConstantList, Map<String, Object> allSwitchDataByAppName) {
+        if (CollectionUtils.isEmpty(switchConstantList) || CollectionUtils.isEmpty(allSwitchDataByAppName)) {
             return;
         }
-        JSONObject switchServerData = JSON.parseObject(allSwitchDataByAppName);
-        if (!switchServerData.getBoolean("success")) {
-            return;
-        }
-        JSONObject data = switchServerData.getJSONObject("data");
         switchConstantList.forEach(field -> {
-            Object serverFieldValue = data.get(field.getName());
+            Object serverFieldValue = allSwitchDataByAppName.get(field.getName());
             if (Objects.nonNull(serverFieldValue)) {
                 boolean b = ConstantValueUpdate.updateTargetBoolean(field, serverFieldValue);
             }
         });
-
     }
 }

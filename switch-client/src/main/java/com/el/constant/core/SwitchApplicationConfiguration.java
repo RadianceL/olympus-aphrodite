@@ -1,15 +1,15 @@
 package com.el.constant.core;
 
-import com.el.base.utils.collection.CollectionUtils;
-import com.el.base.utils.scan.PackageScan;
 import com.el.constant.annotation.Switch;
 import com.el.constant.annotation.SwitchConstant;
 import com.el.constant.exception.SwtichRuntimeException;
+import com.el.constant.utils.PackageScanUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
@@ -45,7 +45,7 @@ public class SwitchApplicationConfiguration {
      */
     private void initSwitchClass(String basePackageName) {
         // 查询spring boot application启动包路径下所有待遇Switch注解的类
-        Set<String> targetClassNameSet = PackageScan.findPackageClass(basePackageName, Switch.class);
+        Set<String> targetClassNameSet = PackageScanUtils.findPackageClass(basePackageName, Switch.class);
         if (CollectionUtils.isEmpty(targetClassNameSet)) {
             return;
         }

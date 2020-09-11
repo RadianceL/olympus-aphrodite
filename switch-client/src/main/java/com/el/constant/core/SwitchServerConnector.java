@@ -8,10 +8,7 @@ import com.el.zk.serialize.SerializingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.curator.framework.recipes.cache.ChildData;
-import org.apache.zookeeper.AddWatchMode;
 import org.apache.zookeeper.CreateMode;
-import org.apache.zookeeper.Watcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -55,6 +52,7 @@ public class SwitchServerConnector {
         // 初始化所有switch字段
         Map<String, Field> switchFieldCache = SwitchApplicationSystem.getSwitchFieldCache();
         switchFieldCache.forEach((k, v) -> {
+            // 如果数据存在，及获取zk结果覆盖本地数据
             if (zookeeperRepository.isExistNode(k)) {
                 byte[] nodeData = zookeeperRepository.getNodeData(k);
                 SwitchFieldInfo switchFieldInfo = SerializingUtil.deserialize(nodeData, SwitchFieldInfo.class);
@@ -62,6 +60,7 @@ public class SwitchServerConnector {
                 return;
             }
 
+            // 如果zk中没有该字段数据， 则在zk中创建数据
             SwitchConstant switchConstant = v.getAnnotation(SwitchConstant.class);
             SwitchFieldInfo switchFieldInfo = new SwitchFieldInfo();
             switchFieldInfo.setDesc(switchConstant.desc());
@@ -76,15 +75,6 @@ public class SwitchServerConnector {
         });
 
         // watch更优雅的方案目前没找到 直接使用zk的watch方案
-        zookeeperRepository.getClient().getZookeeperClient().getZooKeeper().addWatch("/switch", watchedEvent -> {
-            if (Watcher.Event.EventType.NodeDataChanged.equals(watchedEvent.getType())) {
-                try {
-                    byte[] nodeData = zookeeperRepository.getNodeData(watchedEvent.getPath().replaceFirst("/switch", ""));
-                    SwitchNodeChangeListenerHolder.update(new ChildData(watchedEvent.getPath(), null, nodeData));
-                }catch (Throwable throwable) {
-                    log.error("switch - update event error, data path: [{}]", watchedEvent.getPath());
-                }
-            }
-        }, AddWatchMode.PERSISTENT_RECURSIVE);
+        zookeeperRepository.startRootWatcherForUpdate(SwitchNodeChangeListenerHolder::update);
     }
 }

@@ -14,7 +14,4 @@ import java.lang.annotation.*;
 public @interface Switch {
 
     String appName();
-
-    String serverAddr();
-
 }

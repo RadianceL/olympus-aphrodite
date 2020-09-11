@@ -10,9 +10,9 @@ import com.el.constant.security.Level;
  *
  * @author eddie.lys
  */
-@Switch(appName = "test", serverAddr = "http://localhost:9999")
+@Switch(appName = "test")
 public class TestConstant {
 
     @SwitchConstant(desc = "测试", security = Level.L3)
-    public static final Boolean TEST = true;
+    public static final Boolean TEST = false;
 }

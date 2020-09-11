@@ -6,7 +6,7 @@ use zookeeper to store scope data, so we need at least two application:
 - zookeeper: single (suggest zookeeper cluster) 
 - switch-server
 
-switch-server and switch-client use http sync
+switch-server and switch-client use zookeeper listener
 ## How to use
 first of all:
 add `@EnableSwitchAutoConfiguration` Under the SpringBootApplication;
@@ -29,7 +29,7 @@ Then define a constant class like this:
  *
  * @author eddie.lys
  */
-@Switch(appName = "test", serverAddr = "http://localhost:9999")
+@Switch(appName = "test")
 public class TestConstant {
 
     @SwitchConstant(desc = "测试", security = Level.L3)
@@ -39,10 +39,9 @@ public class TestConstant {
 
 As you can see, there has two Switch annotation
 
-1. @Switch(appName = "test", serverAddr = "http://localhost:9999")
+1. @Switch(appName = "test")
     - Statement this is a constant class of Switch management.
     - use space `test` .
-    - server address is `http://localhost:9999`.
 2. @SwitchConstant(desc = "test-only", security = Level.L3)
     - Statement this is a constant field of Switch management.
     - field description is `test-only`.

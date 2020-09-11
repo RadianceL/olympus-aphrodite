@@ -13,9 +13,7 @@ import java.util.List;
 @Data
 public class SwitchRegisterDTO {
 
-    private String appName;
+    private String path;
 
-    private String className;
-
-    private List<SwitchFieldInfo> fieldInfo;
+    private List<SwitchFieldInfo> fieldInfoList;
 }

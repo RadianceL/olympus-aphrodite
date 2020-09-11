@@ -1,6 +1,5 @@
-package com.el.constant.data;
+package com.el.switcher.data;
 
-import com.el.constant.security.Level;
 import lombok.Data;
 
 /**

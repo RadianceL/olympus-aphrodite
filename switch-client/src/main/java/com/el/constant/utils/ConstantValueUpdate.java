@@ -6,7 +6,6 @@ import sun.reflect.FieldAccessor;
 import sun.reflect.ReflectionFactory;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 /**
  * 常量更新工具 <br/>
@@ -16,11 +15,6 @@ import java.lang.reflect.Modifier;
  */
 @Slf4j
 public class ConstantValueUpdate {
-
-    /**
-     * field 修饰符
-     */
-    private static final String MODIFIERS = "modifiers";
 
     /**
      * 更新常量字段

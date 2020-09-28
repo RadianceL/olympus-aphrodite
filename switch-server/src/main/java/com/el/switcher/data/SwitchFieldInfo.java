@@ -23,6 +23,10 @@ public class SwitchFieldInfo {
      */
     private Level level;
     /**
+     * 字段类型
+     */
+    private Class<?> classType;
+    /**
      * 字段值
      */
     private Object value;

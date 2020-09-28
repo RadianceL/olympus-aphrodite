@@ -32,12 +32,12 @@ public class SwitchServerConnector {
 
     /**
      * 注册Switch 属性
-     * @param appName       应用scope
+     * @param classDesc     类描述
      * @param className     类名称
      * @param fields        类成员属性
      */
-    public void registerAndInitSwitchField(String appName, String className, List<Field> fields) {
-        String path = "/".concat(appName).concat("/").concat(className);
+    public void registerAndInitSwitchField(String classDesc, String className, List<Field> fields) {
+        String path = "/".concat(className);
         fields.stream()
                 .filter(field -> Objects.nonNull(field.getAnnotation(SwitchConstant.class)))
                 .forEach(field -> SwitchApplicationSystem.registerSwitchFieldCache(path, field));
@@ -59,13 +59,13 @@ public class SwitchServerConnector {
                 ConstantValueUpdate.updateTargetBoolean(v, switchFieldInfo.getValue());
                 return;
             }
-
             // 如果zk中没有该字段数据， 则在zk中创建数据
             SwitchConstant switchConstant = v.getAnnotation(SwitchConstant.class);
             SwitchFieldInfo switchFieldInfo = new SwitchFieldInfo();
+            switchFieldInfo.setKey(v.getName());
+            switchFieldInfo.setClassType(v.getType());
             switchFieldInfo.setDesc(switchConstant.desc());
             switchFieldInfo.setLevel(switchConstant.security());
-            switchFieldInfo.setKey(v.getName());
             try {
                 switchFieldInfo.setValue(FieldUtils.readStaticField(v, true));
             } catch (IllegalAccessException e) {

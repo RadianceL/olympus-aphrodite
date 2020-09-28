@@ -3,7 +3,7 @@ spring:
     name: switch
   el-util:
     zookeeper:
-      namespace: switch
+      namespace: switch/application
       base-sleep-time-ms: 20
       root-path: root
       server-addr: localhost:2181

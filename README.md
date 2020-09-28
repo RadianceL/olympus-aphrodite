@@ -1,6 +1,8 @@
 # SWITCH
 Provides online constant change capability
 
+*****only support base type class*****
+
 ## Solution
 use zookeeper to store scope data, so we need at least two application:
 - zookeeper: single (suggest zookeeper cluster) 

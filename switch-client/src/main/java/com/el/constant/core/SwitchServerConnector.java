@@ -1,6 +1,7 @@
 package com.el.constant.core;
 
 import com.el.constant.annotation.SwitchConstant;
+import com.el.constant.data.StoreFiledData;
 import com.el.constant.data.SwitchFieldInfo;
 import com.el.constant.utils.ConstantValueUpdate;
 import com.el.zk.core.ZookeeperRepository;
@@ -41,6 +42,7 @@ public class SwitchServerConnector {
         fields.stream()
                 .filter(field -> Objects.nonNull(field.getAnnotation(SwitchConstant.class)))
                 .forEach(field -> SwitchApplicationSystem.registerSwitchFieldCache(path, field));
+        zookeeperRepository.setNodeData(path, classDesc);
         try {
             initZookeeperFieldPath();
         } catch (Exception e) {
@@ -51,27 +53,27 @@ public class SwitchServerConnector {
     private void initZookeeperFieldPath() throws Exception {
         // 初始化所有switch字段
         Map<String, Field> switchFieldCache = SwitchApplicationSystem.getSwitchFieldCache();
-        switchFieldCache.forEach((k, v) -> {
+        switchFieldCache.forEach((fieldPath, field) -> {
             // 如果数据存在，及获取zk结果覆盖本地数据
-            if (zookeeperRepository.isExistNode(k)) {
-                byte[] nodeData = zookeeperRepository.getNodeData(k);
+            if (zookeeperRepository.isExistNode(fieldPath)) {
+                byte[] nodeData = zookeeperRepository.getNodeData(fieldPath);
                 SwitchFieldInfo switchFieldInfo = SerializingUtil.deserialize(nodeData, SwitchFieldInfo.class);
-                ConstantValueUpdate.updateTargetBoolean(v, switchFieldInfo.getValue());
+                ConstantValueUpdate.updateTargetBoolean(field, switchFieldInfo.getValue());
                 return;
             }
             // 如果zk中没有该字段数据， 则在zk中创建数据
-            SwitchConstant switchConstant = v.getAnnotation(SwitchConstant.class);
+            SwitchConstant switchConstant = field.getAnnotation(SwitchConstant.class);
             SwitchFieldInfo switchFieldInfo = new SwitchFieldInfo();
-            switchFieldInfo.setKey(v.getName());
-            switchFieldInfo.setClassType(v.getType());
+            switchFieldInfo.setKey(field.getName());
+            switchFieldInfo.setClassType(field.getType());
             switchFieldInfo.setDesc(switchConstant.desc());
             switchFieldInfo.setLevel(switchConstant.security());
             try {
-                switchFieldInfo.setValue(FieldUtils.readStaticField(v, true));
+                switchFieldInfo.setValue(FieldUtils.readStaticField(field, true));
             } catch (IllegalAccessException e) {
-                log.error("switch - can not read target field: [{}], skip: register error", v.getName());
+                log.error("switch - can not read target field: [{}], skip: register error", field.getName());
             }
-            zookeeperRepository.createNode(CreateMode.PERSISTENT, k, switchFieldInfo);
+            zookeeperRepository.createNode(CreateMode.PERSISTENT, fieldPath, switchFieldInfo);
         });
 
         // watch更优雅的方案目前没找到 直接使用zk的watch方案

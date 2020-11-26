@@ -2,6 +2,7 @@ package com.el.switcher.repository;
 
 import com.el.switcher.data.Level;
 import com.el.switcher.data.SwitchFieldInfo;
+import com.el.switcher.data.TargetPath;
 import com.el.zk.core.ZookeeperRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * <br/>
@@ -28,12 +27,13 @@ class ZookeeperServerCenterTest {
 
     @Test
     void updateTargetField() {
+        TargetPath targetPath = TargetPath.ofPath("/application/com.el.constant.constant.TestConstant/TEST");
         SwitchFieldInfo switchFieldInfo = new SwitchFieldInfo();
         switchFieldInfo.setDesc("测试");
         switchFieldInfo.setLevel(Level.L3);
         switchFieldInfo.setKey("test");
-        switchFieldInfo.setValue(false);
-        zookeeperServerCenter.updateTargetField("/application/com.el.constant.constant.TestConstant/TEST", switchFieldInfo);
+        switchFieldInfo.setValue(true);
+        zookeeperServerCenter.updateTargetField(targetPath, switchFieldInfo);
     }
 
     @Test

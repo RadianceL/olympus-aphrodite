@@ -4,14 +4,11 @@ import com.el.constant.annotation.SwitchConstant;
 import com.el.constant.data.SwitchFieldInfo;
 import com.el.constant.utils.ConstantValueUpdate;
 import com.el.zk.core.ZookeeperRepository;
-import com.el.zk.data.EventData;
 import com.el.zk.serialize.SerializingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.zookeeper.AddWatchMode;
 import org.apache.zookeeper.CreateMode;
-import org.apache.zookeeper.Watcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

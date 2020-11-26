@@ -1,6 +1,7 @@
 package com.el.switcher.repository;
 
 import com.el.switcher.data.SwitchFieldInfo;
+import com.el.switcher.data.TargetPath;
 import com.el.zk.core.ZookeeperRepository;
 import com.el.zk.serialize.SerializingUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,22 @@ import java.util.*;
 public class ZookeeperServerCenter {
 
     private final ZookeeperRepository zookeeperRepository;
+
+    public SwitchFieldInfo verifyDataClassType(TargetPath targetPath, Object targetValue) {
+        byte[] nodeData = zookeeperRepository.getNodeData(targetPath.getPath());
+        SwitchFieldInfo sourceFieldData = SerializingUtil.deserialize(nodeData, SwitchFieldInfo.class);
+        Class<?> targetClassType = targetValue.getClass();
+        Class<?> sourceClassType = sourceFieldData.getClassType();
+        if (!targetClassType.equals(sourceClassType)) {
+            throw new RuntimeException("更新数据类型与目标类型不一致，source: [ " + sourceClassType.getName() + " ]，target: [ " + targetClassType.getName() + " ]");
+        }
+        sourceFieldData.setValue(targetValue);
+        return sourceFieldData;
+    }
+
+    public void updateTargetField(TargetPath targetPath, SwitchFieldInfo switchFieldInfo) {
+        zookeeperRepository.setNodeData(targetPath.getPath(), switchFieldInfo);
+    }
 
     public Map<String, Map<String, List<SwitchFieldInfo>>> listAllSwitchFieldData() {
         Map<String, Map<String, List<SwitchFieldInfo>>> switchFieldMap = new HashMap<>(8);
@@ -83,9 +100,5 @@ public class ZookeeperServerCenter {
 
     public List<String> listAllApplication() {
         return zookeeperRepository.getChildren("/");
-    }
-
-    public void updateTargetField(String path, SwitchFieldInfo switchFieldInfo) {
-        zookeeperRepository.setNodeData(path, switchFieldInfo);
     }
 }

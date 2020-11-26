@@ -1,7 +1,5 @@
 package com.el.constant.core;
 
-import com.el.constant.data.StoreFiledData;
-
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,7 +35,6 @@ public class SwitchApplicationSystem {
     }
 
     public static Field getTargetSwitchFieldCache(String path) {
-        path = path.replaceFirst("/switch/application", "");
         return FIELD_CACHE.get(path);
     }
 }

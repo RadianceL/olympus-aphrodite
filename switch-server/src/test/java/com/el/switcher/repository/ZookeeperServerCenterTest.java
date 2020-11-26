@@ -32,8 +32,8 @@ class ZookeeperServerCenterTest {
         switchFieldInfo.setDesc("测试");
         switchFieldInfo.setLevel(Level.L3);
         switchFieldInfo.setKey("test");
-        switchFieldInfo.setValue(true);
-        zookeeperServerCenter.updateTargetField("/test/com.el.constant.constant.TestConstant/TEST", switchFieldInfo);
+        switchFieldInfo.setValue(false);
+        zookeeperServerCenter.updateTargetField("/application/com.el.constant.constant.TestConstant/TEST", switchFieldInfo);
     }
 
     @Test

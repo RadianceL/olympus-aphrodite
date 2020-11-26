@@ -1,15 +1,17 @@
 package com.el.constant.core;
 
 import com.el.constant.annotation.SwitchConstant;
-import com.el.constant.data.StoreFiledData;
 import com.el.constant.data.SwitchFieldInfo;
 import com.el.constant.utils.ConstantValueUpdate;
 import com.el.zk.core.ZookeeperRepository;
+import com.el.zk.data.EventData;
 import com.el.zk.serialize.SerializingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.zookeeper.AddWatchMode;
 import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.Watcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,15 +40,15 @@ public class SwitchServerConnector {
      * @param fields        类成员属性
      */
     public void registerAndInitSwitchField(String classDesc, String className, List<Field> fields) {
+        String path = "/".concat(className);
+        fields.stream()
+                .filter(field -> Objects.nonNull(field.getAnnotation(SwitchConstant.class)))
+                .forEach(field -> SwitchApplicationSystem.registerSwitchFieldCache(path, field));
         try {
             initZookeeperFieldPath();
         } catch (Exception e) {
             log.error("switch - init switch field data error");
         }
-        String path = "/".concat(className);
-        fields.stream()
-                .filter(field -> Objects.nonNull(field.getAnnotation(SwitchConstant.class)))
-                .forEach(field -> SwitchApplicationSystem.registerSwitchFieldCache(path, field));
         zookeeperRepository.setNodeData(path, classDesc);
     }
 

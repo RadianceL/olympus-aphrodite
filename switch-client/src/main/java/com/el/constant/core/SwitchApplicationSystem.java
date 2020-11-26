@@ -37,7 +37,7 @@ public class SwitchApplicationSystem {
     }
 
     public static Field getTargetSwitchFieldCache(String path) {
-        path = path.replaceFirst("/switch", "");
+        path = path.replaceFirst("/switch/application", "");
         return FIELD_CACHE.get(path);
     }
 }

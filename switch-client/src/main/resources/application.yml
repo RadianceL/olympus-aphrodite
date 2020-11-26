@@ -12,3 +12,6 @@ spring:
       digest: rt:rt
       sessionTimeoutMs: 50000
       connection-timeout-ms: 40000
+
+server:
+  port: 9090

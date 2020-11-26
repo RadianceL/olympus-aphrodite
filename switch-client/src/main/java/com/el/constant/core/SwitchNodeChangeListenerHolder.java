@@ -1,6 +1,5 @@
 package com.el.constant.core;
 
-import com.el.constant.data.StoreFiledData;
 import com.el.constant.data.SwitchFieldInfo;
 import com.el.constant.utils.ConstantValueUpdate;
 import com.el.zk.data.EventData;
@@ -29,18 +28,15 @@ public class SwitchNodeChangeListenerHolder {
         }
         byte[] data = eventData.getData();
         SwitchFieldInfo switchFieldInfo = SerializingUtil.deserialize(data, SwitchFieldInfo.class);
+        Object oldValue = FieldUtils.readStaticField(field, true);
         boolean updateTargetBoolean = ConstantValueUpdate.updateTargetBoolean(field, switchFieldInfo.getValue());
         if (updateTargetBoolean) {
             log.info("switch - update event source field: {}, source value: [{}], target value : [{}]",
-                    field.getName(),
-                    FieldUtils.readStaticField(field, true),
-                    switchFieldInfo.getValue()
+                    field.getName(), oldValue, switchFieldInfo.getValue()
             );
         }else {
             log.error("switch - update event source field error: {}, source value: [{}], target value : [{}]",
-                    field.getName(),
-                    FieldUtils.readStaticField(field, true),
-                    switchFieldInfo.getValue()
+                    field.getName(), oldValue, switchFieldInfo.getValue()
             );
         }
     }

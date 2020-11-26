@@ -38,16 +38,16 @@ public class SwitchServerConnector {
      * @param fields        类成员属性
      */
     public void registerAndInitSwitchField(String classDesc, String className, List<Field> fields) {
-        String path = "/".concat(className);
-        fields.stream()
-                .filter(field -> Objects.nonNull(field.getAnnotation(SwitchConstant.class)))
-                .forEach(field -> SwitchApplicationSystem.registerSwitchFieldCache(path, field));
-        zookeeperRepository.setNodeData(path, classDesc);
         try {
             initZookeeperFieldPath();
         } catch (Exception e) {
             log.error("switch - init switch field data error");
         }
+        String path = "/".concat(className);
+        fields.stream()
+                .filter(field -> Objects.nonNull(field.getAnnotation(SwitchConstant.class)))
+                .forEach(field -> SwitchApplicationSystem.registerSwitchFieldCache(path, field));
+        zookeeperRepository.setNodeData(path, classDesc);
     }
 
     private void initZookeeperFieldPath() throws Exception {

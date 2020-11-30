@@ -10,9 +10,14 @@ import com.el.switcher.data.TargetPath;
  */
 public interface DataSourceCoreService {
 
+
     /**
      * 更新模板字段
+     * @param targetPath    目标路径
+     * @param classType     修改的目标类
+     * @param targetValue   目标值
+     * @return              是否更新成功
      */
-    boolean updateTargetField(TargetPath targetPath, Object targetValue);
+    boolean updateTargetField(TargetPath targetPath, String classType, String targetValue);
 
 }

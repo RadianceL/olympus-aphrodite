@@ -88,6 +88,16 @@ public class ZookeeperServerCenter {
     /**
      * @return Map - 应用名称, 应用内常量类列表
      */
+    public Map<String, List<String>> listAllConstantClassByApplication(String application) {
+        Map<String, List<String>> constantsMap = new HashMap<>(8);
+        List<String> constantsClassList = zookeeperRepository.getChildren("/".concat(application));
+        constantsMap.put(application, constantsClassList);
+        return constantsMap;
+    }
+
+    /**
+     * @return Map - 应用名称, 应用内常量类列表
+     */
     public Map<String, List<String>> listAllConstantClassByApplication() {
         Map<String, List<String>> constantsMap = new HashMap<>(8);
         List<String> applications = listAllApplication();

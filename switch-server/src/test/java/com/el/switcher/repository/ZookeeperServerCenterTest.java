@@ -38,7 +38,7 @@ class ZookeeperServerCenterTest {
 
     @Test
     void listAllSwitchFieldData() {
-        Map<String, Map<String, List<SwitchFieldInfo>>> stringMapMap = zookeeperServerCenter.listAllSwitchFieldData();
+        List<String> stringMapMap = zookeeperServerCenter.listAllApplication();
         System.out.println(stringMapMap);
     }
 

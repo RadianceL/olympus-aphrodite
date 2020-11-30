@@ -4,16 +4,14 @@ import com.el.base.utils.support.exception.ExtendRuntimeException;
 import com.el.switcher.data.SwitchFieldInfo;
 import com.el.switcher.data.TargetPath;
 import com.el.switcher.entity.Response;
+import com.el.switcher.entity.data.UpdateFieldRequest;
 import com.el.switcher.repository.ZookeeperServerCenter;
 import com.el.switcher.service.DataSourceCoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,12 +57,13 @@ public class SwitchMainController {
     }
 
     @PostMapping("/switch/data/{application}/{targetClass}/{targetField}")
-    public Response<Boolean> updateField(@PathVariable String application, @PathVariable String targetClass, @PathVariable String targetField, String targetType, String targetFieldValue){
+    public Response<Boolean> updateField(@PathVariable String application, @PathVariable String targetClass, @PathVariable String targetField, @RequestBody UpdateFieldRequest targetFieldValue){
         TargetPath targetPath = TargetPath.ofPath(application, targetClass, targetField);
+        String targetType = targetFieldValue.getTargetType();
         if (StringUtils.isBlank(targetType)) {
             throw new ExtendRuntimeException("target class type can't be blank");
         }
-        boolean isUpdateSuccess = dataSourceCoreService.updateTargetField(targetPath, targetType, targetFieldValue);
+        boolean isUpdateSuccess = dataSourceCoreService.updateTargetField(targetPath, targetType, targetFieldValue.getTargetFieldValue());
         // 返回更新成功的机器数量及ip，失败的机器数量及IP
         return Response.ofSuccess(isUpdateSuccess);
     }

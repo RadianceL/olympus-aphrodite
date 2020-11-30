@@ -5,7 +5,6 @@ import com.el.switcher.data.TargetPath;
 import com.el.switcher.entity.enumerate.ClassTypeMapEnum;
 import com.el.switcher.repository.ZookeeperServerCenter;
 import com.el.switcher.service.DataSourceCoreService;
-import com.el.zk.core.ZookeeperRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,7 @@ public class DataSourceCoreServiceImpl implements DataSourceCoreService {
             ClassTypeMapEnum classMap = ClassTypeMapEnum.findClassMap(classType);
             Object targetObject = classMap.convertTo(targetValue);
             // 校验更新字段类型
+            log.info("更新目标字段：{}, value: [{}]", targetPath.getPath(), targetObject);
             SwitchFieldInfo switchFieldInfo = zookeeperServerCenter.verifyDataClassType(targetPath, targetObject);
             // 实际更新字段 并创建数据节点/switch/update/${application}/updateVersion
             zookeeperServerCenter.updateTargetField(targetPath, switchFieldInfo);

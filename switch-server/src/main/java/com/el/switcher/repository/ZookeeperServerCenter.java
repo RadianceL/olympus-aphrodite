@@ -30,7 +30,7 @@ public class ZookeeperServerCenter {
         SwitchFieldInfo sourceFieldData = SerializingUtil.deserialize(nodeData, SwitchFieldInfo.class);
         Class<?> targetClassType = targetValue.getClass();
         Class<?> sourceClassType = sourceFieldData.getClassType();
-        if (!targetClassType.equals(sourceClassType)) {
+        if (targetClassType.isAssignableFrom(sourceClassType)) {
             throw new RuntimeException("更新数据类型与目标类型不一致，source: [ " + sourceClassType.getName() + " ]，target: [ " + targetClassType.getName() + " ]");
         }
         sourceFieldData.setValue(targetValue);

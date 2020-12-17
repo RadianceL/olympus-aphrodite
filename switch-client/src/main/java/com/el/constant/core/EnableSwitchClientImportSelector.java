@@ -1,6 +1,7 @@
 package com.el.constant.core;
 
 import com.el.constant.endpoint.SwitchEndpoint;
+import com.el.constant.utils.SpringStaticContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.annotation.Order;
@@ -22,6 +23,9 @@ public class EnableSwitchClientImportSelector implements ImportSelector {
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {
         String className = importingClassMetadata.getClassName();
         SwitchApplicationSystem.setApplicationBasePackage(className.substring(0, className.lastIndexOf(".")));
-        return new String[]{SwitchApplicationConfiguration.class.getName(), SwitchEndpoint.class.getName()};
+        return new String[]{SwitchApplicationConfiguration.class.getName(),
+                SpringStaticContextHolder.class.getName(),
+                SwitchServerConnector.class.getName(),
+                SwitchEndpoint.class.getName()};
     }
 }

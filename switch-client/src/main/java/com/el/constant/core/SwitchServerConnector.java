@@ -24,7 +24,6 @@ import java.util.Objects;
  * @author eddie.lys
  */
 @Slf4j
-@Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SwitchServerConnector {
 
@@ -44,7 +43,7 @@ public class SwitchServerConnector {
         try {
             initZookeeperFieldPath();
         } catch (Exception e) {
-            log.error("switch - init switch field data error");
+            log.error("switch - init switch field data error", e);
         }
         zookeeperRepository.setNodeData(path, classDesc);
     }
@@ -70,7 +69,7 @@ public class SwitchServerConnector {
             try {
                 switchFieldInfo.setValue(FieldUtils.readStaticField(field, true));
             } catch (IllegalAccessException e) {
-                log.error("switch - can not read target field: [{}], skip: register error", field.getName());
+                log.error("switch - can not read target field: [{}], skip: register error", field.getName(), e);
             }
             zookeeperRepository.createNode(CreateMode.PERSISTENT, fieldPath, switchFieldInfo);
         });

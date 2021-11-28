@@ -2,8 +2,6 @@ package com.el.constant.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import sun.reflect.FieldAccessor;
-import sun.reflect.ReflectionFactory;
 
 import java.lang.reflect.Field;
 
@@ -26,8 +24,8 @@ public class ConstantValueUpdate {
         try{
             // 去掉final对字段的影响
             FieldUtils.removeFinalModifier(targetField);
-            FieldAccessor fa = ReflectionFactory.getReflectionFactory().newFieldAccessor(targetField, false);
-            fa.set(null, value);
+            targetField.setAccessible(true);
+            FieldUtils.writeStaticField(targetField, value);
             return true;
         }catch (Throwable throwable) {
             log.error("switch - update static target field error happen", throwable);

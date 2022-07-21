@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.el</groupId>
-    <artifactId>switch</artifactId>
+    <artifactId>olympus-aphrodite</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>switch</name>
+    <name>olympus-aphrodite</name>
     <packaging>pom</packaging>
     <description>Demo project for Spring Boot</description>
 

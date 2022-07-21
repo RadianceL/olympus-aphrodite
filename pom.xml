@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>olympus-aphrodite</name>
     <packaging>pom</packaging>
-    <description>Demo project for Spring Boot</description>
+    <description>olympus-aphrodite</description>
 
     <modules>
         <module>switch-client</module>

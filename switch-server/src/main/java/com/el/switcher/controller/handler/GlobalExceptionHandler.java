@@ -1,9 +1,9 @@
 package com.el.switcher.controller.handler;
 
-import com.el.base.utils.support.exception.AbstractDomainRuntimeException;
-import com.el.base.utils.support.exception.data.ErrorMessage;
-import com.el.base.utils.support.exception.handler.ExceptionHandlerManager;
 import com.el.switcher.entity.Response;
+import com.olympus.base.utils.support.exception.AbstractDomainRuntimeException;
+import com.olympus.base.utils.support.exception.ExceptionHandlerManager;
+import com.olympus.base.utils.support.globalization.ErrorMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

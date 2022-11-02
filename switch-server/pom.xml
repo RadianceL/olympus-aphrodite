@@ -33,8 +33,8 @@
 
         <dependency>
             <groupId>com.el</groupId>
-            <artifactId>common-utils-base</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <artifactId>olympus-artemis-base</artifactId>
+            <version>1.0.6</version>
         </dependency>
 
         <dependency>

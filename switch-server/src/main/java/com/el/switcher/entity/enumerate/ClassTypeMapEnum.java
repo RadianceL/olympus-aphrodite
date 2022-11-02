@@ -2,8 +2,7 @@ package com.el.switcher.entity.enumerate;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.el.base.utils.support.exception.ExtendRuntimeException;
+import com.olympus.base.utils.support.exception.ExtendRuntimeException;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
